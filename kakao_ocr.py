@@ -1,8 +1,6 @@
-import json
-
 import cv2
 import requests
-import sys
+
 
 from kakaotrans import Translator
 
@@ -65,37 +63,6 @@ def kakao_translator(text: str, target: str):
     result = translator.translate(text, src="kr", tgt=target, separate_lines=True)
     return result
 
-def make_images(message, w, h):
 
 
-def main():
-    # if len(sys.argv) != 3:
-    #     print("Please run with args: $ python example.py /path/to/image appkey")
-    # image_path, appkey = sys.argv[1], sys.argv[2]
 
-    image_path = './crop_images/crop_2_00284.jpg'
-    appkey = "d1e155018697e1aa5510637a8554d043"
-
-    resize_impath = kakao_ocr_resize(image_path)
-    if resize_impath is not None:
-        image_path = resize_impath
-        print("원본 대신 리사이즈된 이미지를 사용합니다.")
-
-    output = kakao_ocr(image_path, appkey).json()
-    # print(len(output["result"]))
-    tmp = []
-    for i in range(len(output["result"])):
-        tmp.append(output["result"][i]["recognition_words"][0])
-    # print("[OCR] output:\n{}\n".format(json.dumps(output, sort_keys=True, indent=2, ensure_ascii=False)))
-    result = " ".join(tmp)
-    print(result)
-
-    trans_result = kakao_translator(result, "en")
-    print(trans_result)
-
-    path = image_path.split('.')[1].split('/')[-1].split('_')[-1]
-    print(path)
-
-    result_path = "./result_images/" + path + ".jpg"
-if __name__ == "__main__":
-    main()

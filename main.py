@@ -86,10 +86,10 @@ def make_images(path: str, index: int, message: str, max_list: list, min_list: l
     w = max_list[0] - min_list[0]
     h = max_list[1] - min_list[1]
 
-    image = Image.new('RGB', (w, h), color=bg_color)
+    image = Image.new('RGB', (w+1, h+1), color=bg_color)
     draw = ImageDraw.Draw(image)
 
-    lines = textwrap.wrap(message, width=20)
+    lines = textwrap.wrap(message, width=int(w/5))
 
     x_text = 0
     y_text = 0
@@ -140,8 +140,8 @@ def paste_path(f_name:str, image_path: str, result_crop_images_path: str, bubble
 
 
 def main():
-    json_path = './json/00284.json'
-    images_path = './images/00284.jpg'
+    json_path = './json/00280.json'
+    images_path = './images/00280.jpg'
     file_name = images_path.split('/')[-1].split('.')[0]
     print(file_name)
     # json 파일
@@ -176,20 +176,23 @@ def main():
     tmp_img.save(result_path)
 
     for i in range(len(ocr_data)):
-        result_text, min_list, max_list = text_recongition_words(ocr_data[i])
-        trans_result = kakao_translator(result_text, 'en')[0]
+        try:
+            result_text, min_list, max_list = text_recongition_words(ocr_data[i])
+            trans_result = kakao_translator(result_text, 'en')[0]
 
-        make_images_path = make_images(file_name, i, trans_result, max_list, min_list)
-
-
-        print(result_text, min_list, max_list)
+            make_images_path = make_images(file_name, i, trans_result, max_list, min_list)
 
 
-        result_crop_images_path = paste_crop_image(file_name, i, crop_paths[i], make_images_path, min_list)
+            print(result_text, min_list, max_list)
 
-        print(result_crop_images_path)
 
-        paste_path(file_name, result_path, result_crop_images_path, r_bubble[i])
+            result_crop_images_path = paste_crop_image(file_name, i, crop_paths[i], make_images_path, min_list)
+
+            print(result_crop_images_path)
+
+            paste_path(file_name, result_path, result_crop_images_path, r_bubble[i])
+        except ValueError:
+            pass
 
 if __name__ == "__main__":
     main()

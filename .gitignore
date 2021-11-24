@@ -120,4 +120,8 @@ venv/
 images/
 json/
 tmp_dic/
-
+make_images/
+result_crop_images/
+result_images/
+crop_images/
+fonts/
